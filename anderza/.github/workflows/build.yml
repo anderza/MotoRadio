@@ -1,1 +1,44 @@
+name: Сборка MotoRadio
+
+# APK собирается при каждой загрузке в репозиторий и по кнопке Run workflow на вкладке Actions
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Собрать APK
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon --stacktrace
+          mkdir -p out
+          cp app/build/outputs/apk/release/app-release.apk out/MotoRadio-1.0-${{ github.run_number }}.apk
+
+      - name: Выложить APK в Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: MotoRadio-APK
+          path: out/*.apk
+
+      - name: Выложить APK в Releases
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: MotoRadio, сборка ${{ github.run_number }}
+          files: out/*.apk
 
