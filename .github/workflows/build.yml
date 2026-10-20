@@ -14,6 +14,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Если в репозиторий загружен архив MotoRadio-Android.zip или папка MotoRadio-Android,
+      # а не её содержимое, — достаём проект в корень репозитория
+      - name: Подготовить проект
+        run: |
+          if [ ! -f gradlew ]; then
+            if [ -f MotoRadio-Android.zip ]; then unzip -q -o MotoRadio-Android.zip -d _src; fi
+            dir=$(dirname "$(find . -name gradlew -not -path './.git/*' | head -n 1)")
+            if [ -z "$dir" ] || [ "$dir" = "." ]; then echo "Не найден gradlew: загрузите проект MotoRadio-Android"; exit 1; fi
+            cp -a "$dir"/. .
+          fi
+          ls -la
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
