@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MotoRadio</string>
+    <string name="widget_name">MotoRadio — плеер</string>
+    <string name="widget_description">Обложка, исполнитель, песня и управление радио</string>
+    <string name="open_app">Открыть приложение</string>
+    <string name="pick_station">Выберите станцию</string>
+    <string name="reconnect">Переподключить поток</string>
+    <string name="prev">Предыдущая станция</string>
+    <string name="next">Следующая станция</string>
+    <string name="play_pause">Пуск или пауза</string>
+    <string name="shuffle">Случайная станция</string>
+</resources>
