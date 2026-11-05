@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,3 +29,10 @@ jobs:
         with:
           name: MotoRadio-APK
           path: out/*.apk
+      - name: Положить APK в ветку apk-build
+        run: |
+          cd out
+          git init -q -b apk-build
+          git -c user.name=ci -c user.email=ci@localhost add -A
+          git -c user.name=ci -c user.email=ci@localhost commit -q -m "APK ${{ github.sha }}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" apk-build
